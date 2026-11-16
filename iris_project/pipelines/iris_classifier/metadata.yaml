@@ -1,0 +1,68 @@
+
+blocks:
+- uuid: load_iris
+  type: data_loader
+  name: load_iris
+  language: python
+  executor_type: local_python
+  upstream_blocks: []
+  downstream_blocks:
+  - prepare_data
+  configuration: {}
+
+- uuid: prepare_data
+  type: transformer
+  name: prepare_data
+  language: python
+  executor_type: local_python
+  upstream_blocks:
+  - load_iris
+  downstream_blocks:
+  - train_model
+  configuration: {}
+
+- uuid: train_model
+  type: transformer
+  name: train_model
+  language: python
+  executor_type: local_python
+  upstream_blocks:
+  - prepare_data
+  downstream_blocks:
+  - save_results
+  - evaluate_model
+  - prediction_summary
+  configuration: {}
+
+- uuid: save_results
+  type: data_exporter
+  name: save_results
+  language: python
+  executor_type: local_python
+  upstream_blocks:
+  - train_model
+  downstream_blocks: []
+  configuration: {}
+
+- uuid: evaluate_model
+  type: transformer
+  name: evaluate_model
+  language: python
+  executor_type: local_python
+  upstream_blocks:
+  - train_model
+  downstream_blocks: []
+  configuration: {}
+
+- uuid: prediction_summary
+  type: transformer
+  name: prediction_summary
+  language: python
+  executor_type: local_python
+  upstream_blocks:
+  - train_model
+  downstream_blocks: []
+  configuration: {}
+
+name: iris_classifier
+type: python

@@ -1,19 +1,19 @@
 
 from sklearn.model_selection import train_test_split
 
-# Mage decorator compatibility
-try:
-    from mage_ai.data_preparation.decorators import transformer
-except ImportError:
-    def transformer(func):
-        return func
+if "transformer" not in globals():
+    def transformer(function):
+        return function
 
+if "test" not in globals():
+    def test(function):
+        return function
 
 @transformer
 def transform(df, *args, **kwargs):
     """
-    Split the Iris dataset into 80% training
-    data and 20% testing data.
+    Split the Iris dataset into 80% training data
+    and 20% testing data.
     """
 
     train_indices, test_indices = train_test_split(
@@ -29,3 +29,12 @@ def transform(df, *args, **kwargs):
     output.loc[test_indices, "split"] = "test"
 
     return output
+
+
+@test
+def test_output(output, *args):
+    assert output is not None
+    assert len(output) == 150
+
+    assert (output["split"] == "train").sum() == 120
+    assert (output["split"] == "test").sum() == 30

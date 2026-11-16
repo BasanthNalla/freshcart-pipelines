@@ -18,3 +18,5 @@ __pycache__/
 # Virtual environments
 venv/
 .venv/
+# Temporary tunnel files
+iris_project/.ssh_tunnel/
